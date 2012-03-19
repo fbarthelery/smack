@@ -80,7 +80,9 @@ package org.jivesoftware.smack.packet;
  *
  * @author Gaston Dombiak
  */
-public class StreamError {
+public class StreamError extends Packet {
+
+    public static final String NAMESPACE = "urn:ietf:params:xml:ns:xmpp-streams";
 
     private String code;
 
@@ -101,6 +103,18 @@ public class StreamError {
     public String toString() {
         StringBuilder txt = new StringBuilder();
         txt.append("stream:error (").append(code).append(")");
+        return txt.toString();
+    }
+
+    @Override
+    public String toXML() {
+        StringBuilder txt = new StringBuilder();
+        txt.append("<stream:error><");
+	txt.append(code);
+	txt.append(" xmlns=\"");
+	txt.append(NAMESPACE);
+	txt.append("\" />");
+	txt.append("</stream:error>");
         return txt.toString();
     }
 }
