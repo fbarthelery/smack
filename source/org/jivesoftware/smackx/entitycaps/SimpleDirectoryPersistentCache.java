@@ -111,7 +111,11 @@ public class SimpleDirectoryPersistentCache implements
      */
 	private static void writeInfoToFile(File file, DiscoverInfo info) throws IOException {
 		DataOutputStream dos = new DataOutputStream(new FileOutputStream(file));
-		dos.writeUTF(info.toXML());
+		try {
+			dos.writeUTF(info.toXML());
+		} finally {
+			dos.close();
+		}
 	}
 	
 	/**
@@ -123,7 +127,12 @@ public class SimpleDirectoryPersistentCache implements
 	 */
     private static DiscoverInfo restoreInfoFromFile(File file) throws IOException {
         DataInputStream dis = new DataInputStream(new FileInputStream(file));
-        String fileContent = dis.readUTF();
+        String fileContent = "";
+	try {
+		fileContent = dis.readUTF();
+	} finally {
+		dis.close();
+	}
         Reader reader = new StringReader(fileContent);
         XmlPullParser parser;
         try {
